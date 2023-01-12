@@ -28,7 +28,7 @@ def tictac_grid(value):
 
 
 def my_scoreboard(score_board):
-    print(colors.OKGREEN + "\t┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓" + colors.ENDC)
+    print(colors.OKGREEN + "\t┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫" + colors.ENDC)
     print(colors.OKGREEN + "\t┃            " + colors.FAIL + "SCOREBOARD" + colors.ENDC + "           " + colors.OKGREEN + "┃")
     print("\t┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛" + colors.ENDC)
 
@@ -39,6 +39,15 @@ def my_scoreboard(score_board):
     print(colors.OKBLUE + "\t", score_board[list_of_the_two_players[1]])
 
     print(colors.OKGREEN + "\t━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" + colors.ENDC)
+
+
+def my_history(history):
+    print(colors.OKGREEN + "\t┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓" + colors.ENDC)
+    print(colors.OKGREEN + "\t┃             " + colors.FAIL + "HISTORY" + colors.ENDC + "             " + colors.OKGREEN + "┃")
+    print("\t┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫" + colors.ENDC)
+    for i in range(len(history)):
+        print(colors.OKBLUE + "\t", "GAME", i + 1, ":", history[i],)
+    print(colors.OKGREEN + "\t┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫" + colors.ENDC)
 
 
 def win_validate(position_player, current_player):
@@ -108,6 +117,7 @@ def game_loop(current_player):
             else:
                 print(colors.WARNING + "IA TURN" + colors.ENDC)
                 move = ia.ia(value, difficulty)
+
                 value[move - 1] = current_player
 
         position_player[current_player].append(move)
@@ -224,7 +234,7 @@ if __name__ == "__main__":
                 ia_player = "IA"
 
         print(colors.OKGREEN + "Player" + colors.ENDC)
-        first_player = input(colors.OKCYAN + "First player enter your name: " + colors.ENDC)
+        first_player = input(colors.OKCYAN + "Enter your name: " + colors.ENDC)
         print("\n")
 
         current_player = first_player
@@ -239,22 +249,51 @@ if __name__ == "__main__":
         score_board = {first_player: 0,
                        ia_player: 0}
 
+        history = []
+
         my_scoreboard(score_board)
 
         while True:
+            print(colors.OKGREEN + "Please press 1 to start" + colors.ENDC)
+            print(colors.FAIL + "Please press 2 for Exit" + colors.ENDC)
 
-            player_choice['X'] = first_player
-            player_choice['O'] = ia_player
+            try:
+                choice = int(input())
 
+            except ValueError:
+                print(colors.FAIL + "This input is Invalid!!! Please Try Again\n" + colors.ENDC)
+                continue
+
+            if choice == 1:
+                player_choice['X'] = first_player
+                player_choice['O'] = ia_player
+
+            elif choice == 2:
+                print("\t" + colors.OKBLUE + "The final scores are" + colors.ENDC + "\n")
+                my_history(history)
+                my_scoreboard(score_board)
+                print("\t" + colors.OKBLUE + "Thank For Playing :)" + colors.ENDC)
+                break
+
+            else:
+                print(colors.FAIL + "This is an Invalid choice!! Please try again\n" + colors.ENDC)
+                continue
 
             winner = game_loop(option[0])
 
             if winner != 'T':
                 player_won = player_choice[winner]
                 score_board[player_won] = score_board[player_won] + 1
-
+                if player_won == first_player:
+                    history.append(colors.OKGREEN + player_won + colors.WARNING + " - " + colors.FAIL + ia_player + colors.ENDC)
+                else:
+                    history.append(colors.FAIL + first_player + colors.WARNING + " - " + colors.OKGREEN + ia_player + colors.ENDC)
+                my_history(history)
                 my_scoreboard(score_board)
-
+            else:
+                history.append(colors.WARNING + first_player + colors.WARNING + " - " + colors.WARNING + ia_player + colors.FAIL + " ┃ " + colors.OKBLUE + "TIE" + colors.ENDC)
+                my_history(history)
+                my_scoreboard(score_board)
             if current_player == first_player:
                 player_current = ia_player
             else:
