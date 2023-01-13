@@ -19,14 +19,24 @@ def ia(board, difficulty):
     random_value = random.randrange(1, 9)
 
     while True:
-        if difficulty == '1':
+        if difficulty == '1': # Play totally random move
             if board[random_value - 1] == ' ':
                 return random_value
             elif board:
                 random_value = random.randrange(1, 9)
-        if difficulty == '2':
-            pass
-        if difficulty == '3':
+        if difficulty == '2':  # make dumb move 1/5 of the time
+            chance = random.random()
+            if chance <= 1/5:
+                for i in range(len(board)):
+                    if board[i] == ' ':
+                        return i + 1
+            else:
+                if board[5 - 1] == ' ':
+                    return 5
+                else:
+                    return predict_futur(opponent_board, ia_board, board)
+
+        if difficulty == '3':  # Always wake best move
             if board[5 - 1] == ' ':
                 return 5
             else:
@@ -70,14 +80,15 @@ def predict_futur(enemy_board, ia_board, board):
         return best_offensive
     if best_defensive != 0:
         return best_defensive
-    else:  # If no counter or win moves then choose a corner and if no corner left put in any blank space
-        for i in [1, 3, 7, 9]:
+    else:
+        if (board[0] == "X" and board[8] == "X") or (board[2] == "X" and board[6] == "X"):
+            return 4
+        for i in [1, 3, 7, 9]:  # If no counter or win moves then choose a corner and if no corner left put in any blank space
             if board[i - 1] == ' ':
                 return i
         for i in range(len(board)):
             if board[i] == ' ':
                 return i + 1
-
 
 
 def are_all_elements_in_list(list1, list2):

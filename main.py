@@ -167,6 +167,8 @@ if __name__ == "__main__":
         score_board = {first_player: 0,
                        second_player: 0}
 
+        history = []
+
         my_scoreboard(score_board)
 
         while True:
@@ -196,8 +198,10 @@ if __name__ == "__main__":
                     player_choice['X'] = first_player
 
             elif choice == 3:
-                print(colors.OKBLUE + "The final scores are" + colors.ENDC)
+                print("\t" + colors.OKBLUE + "The final scores are: " + colors.ENDC + "\n")
+                my_history(history)
                 my_scoreboard(score_board)
+                print("\t" + colors.OKBLUE + "Thank For Playing :)" + colors.ENDC)
                 break
 
             else:
@@ -209,6 +213,17 @@ if __name__ == "__main__":
                 player_won = player_choice[winner]
                 score_board[player_won] = score_board[player_won] + 1
 
+                if player_won == first_player:
+                    history.append(
+                        colors.OKGREEN + player_won + colors.WARNING + " - " + colors.FAIL + second_player + colors.ENDC)
+                else:
+                    history.append(
+                        colors.FAIL + first_player + colors.WARNING + " - " + colors.OKGREEN + second_player + colors.ENDC)
+                my_history(history)
+                my_scoreboard(score_board)
+            else:
+                history.append(colors.WARNING + first_player + colors.WARNING + " - " + colors.WARNING + second_player + colors.FAIL + " ┃ " + colors.OKBLUE + "TIE" + colors.ENDC)
+                my_history(history)
                 my_scoreboard(score_board)
 
             if current_player == first_player:
@@ -221,6 +236,7 @@ if __name__ == "__main__":
         print(colors.OKCYAN + "Please press 1 for EASY")
         print(colors.OKCYAN + "Please press 2 for NORMAL")
         print(colors.OKCYAN + "Please press 3 for HARD" + colors.ENDC)
+
         difficulty = input(colors.WARNING + "Choix: " + colors.ENDC)
 
         match difficulty:
@@ -269,7 +285,7 @@ if __name__ == "__main__":
                 player_choice['O'] = ia_player
 
             elif choice == 2:
-                print("\t" + colors.OKBLUE + "The final scores are" + colors.ENDC + "\n")
+                print("\t" + colors.OKBLUE + "The final scores are: " + colors.ENDC + "\n")
                 my_history(history)
                 my_scoreboard(score_board)
                 print("\t" + colors.OKBLUE + "Thank For Playing :)" + colors.ENDC)
